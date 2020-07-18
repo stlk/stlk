@@ -24,8 +24,8 @@ def replace_chunk(content, marker, chunk, inline=False):
 
 def get_stat_values(totals):
     return f"""\
-        distance: {(totals["distance"] / 1000):,.0f} km
-        elevation_gain: {totals["elevation_gain"]:,.0f} m
+        distance: {(totals["distance"] / 1000):,.0f} km  
+        elevation_gain: {totals["elevation_gain"]:,.0f} m  
         count: {totals["count"]}
         """
 
