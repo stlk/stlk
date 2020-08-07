@@ -3,13 +3,16 @@ import re
 import os
 import textwrap
 
-import httpx
-
+from stravalib.client import Client
+from stravalib import unithelper
 
 root = pathlib.Path(__file__).parent.resolve()
 
-STRAVA_TOKEN = os.environ.get("STRAVA_TOKEN")
+client_id = os.environ.get("STRAVA_CLIENT_ID")
+client_secret = os.environ.get("STRAVA_CLIENT_SECRET")
+refresh_token = os.environ.get("STRAVA_REFRESH_TOKEN")
 
+# https://github.com/hozn/stravalib
 
 def replace_chunk(content, marker, chunk, inline=False):
     r = re.compile(
@@ -24,45 +27,40 @@ def replace_chunk(content, marker, chunk, inline=False):
 
 def get_stat_values(totals):
     return f"""\
-        distance: {(totals["distance"] / 1000):,.0f} km  
-        elevation_gain: {totals["elevation_gain"]:,.0f} m  
-        count: {totals["count"]}
-        """
+    distance: {unithelper.kilometers(totals.distance)}  
+    elevation_gain: {totals.elevation_gain}  
+    count: {totals.count}
+    """
 
 
 def fetch_stats():
-    athlete_id = 15733086
+    client = Client()
 
-    try:
-        stats = httpx.get(
-            f"https://www.strava.com/api/v3/athletes/{athlete_id}/stats",
-            headers={"Authorization": f"Bearer {STRAVA_TOKEN}"},
-        ).json()
-        print(stats)
-        return textwrap.dedent(
-            f"""\
-        #### Recent rides
+    refresh_response = client.refresh_access_token(client_id=client_id, client_secret=client_secret,refresh_token=refresh_token)
+    client.access_token = refresh_response['access_token']
+    stats = client.get_athlete_stats()
 
-{get_stat_values(stats["recent_ride_totals"])}
+    return textwrap.dedent(
+        f"""\
+    #### Recent rides
 
-        #### YTD ride totals
+{get_stat_values(stats.recent_ride_totals)}
 
-{get_stat_values(stats["ytd_ride_totals"])}
+    #### YTD ride totals
 
-        #### All ride totals
+{get_stat_values(stats.ytd_ride_totals)}
 
-{get_stat_values(stats["all_ride_totals"])}
-        """
-        )
-    except Exception as e:
-        print(f"Exception when calling AthletesApi->getStats: {e}\n")
+    #### All ride totals
+
+{get_stat_values(stats.all_ride_totals)}
+    """
+    )
 
 
-if __name__ == "__main__":
-    readme = root / "README.md"
-    readme_contents = readme.open().read()
+readme = root / "README.md"
+readme_contents = readme.open().read()
 
-    stats = fetch_stats()
-    rewritten = replace_chunk(readme_contents, "strava_stats", stats)
+stats = fetch_stats()
+rewritten = replace_chunk(readme_contents, "strava_stats", stats)
 
-    readme.open("w").write(rewritten)
+readme.open("w").write(rewritten)

@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
   schedule:
-  - cron:  '0 3 * * MON'
+  - cron:  '0 3 * * *'
 
 jobs:
   build:
@@ -28,7 +28,9 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Update README
       env:
-        STRAVA_TOKEN: ${{ secrets.STRAVA_TOKEN }}
+        STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+        STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+        STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
       run: |-
         python build_readme.py
         cat README.md
