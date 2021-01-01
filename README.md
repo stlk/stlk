@@ -12,9 +12,9 @@ count: 0
 
 #### YTD ride totals
 
-distance: 524.40 km  
-elevation_gain: 2512.00 m  
-count: 34
+distance: 0.00 km  
+elevation_gain: 0.00 m  
+count: 0
 
 
 #### All ride totals
