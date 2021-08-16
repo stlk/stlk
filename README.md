@@ -5,9 +5,9 @@ Currently building Shopify Apps. Read [my blog](https://blog.rousek.name/) or [f
 <!-- strava_stats starts -->
 #### Recent rides
 
-distance: 254.41 km  
-elevation_gain: 871.79 m  
-count: 8
+distance: 209.00 km  
+elevation_gain: 735.75 m  
+count: 7
 
 
 #### YTD ride totals
