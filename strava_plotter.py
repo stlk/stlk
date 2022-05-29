@@ -21,7 +21,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logging.basicConfig()
 
-#https://github.com/ndoornekamp/strava-plotter
+# https://github.com/ndoornekamp/strava-plotter
+# https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D.set_linewidth
+
+
 def get_bounding_box(coordinates, margin):
     """
     Given a list of coordinates, returns a bounding box that contains all these coordinates
@@ -179,7 +182,7 @@ def plot_cluster(ax, ride_cluster_bounding_box, ride_cluster, params):
             linewidth=params['linewidth'],
             transform=ccrs.PlateCarree(),
             antialiased=True,
-            path_effects=[pe.Stroke(linewidth=params['linewidth']*2.5, foreground='w'), pe.Normal()]
+            # path_effects=[pe.Stroke(linewidth=params['linewidth']*2.5, foreground='w'), pe.Normal()]
         )
 
     return ax
