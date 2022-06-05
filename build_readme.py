@@ -5,6 +5,7 @@ import textwrap
 
 from stravalib.client import Client
 from stravalib import unithelper
+from generate_map import generate_map_from_last_ride
 
 root = pathlib.Path(__file__).parent.resolve()
 
@@ -14,6 +15,7 @@ refresh_token = os.environ.get("STRAVA_REFRESH_TOKEN")
 
 # https://github.com/hozn/stravalib
 
+
 def replace_chunk(content, marker, chunk, inline=False):
     r = re.compile(
         r"<!\-\- {} starts \-\->.*<!\-\- {} ends \-\->".format(marker, marker),
@@ -21,7 +23,7 @@ def replace_chunk(content, marker, chunk, inline=False):
     )
     if not inline:
         chunk = "\n{}\n".format(chunk)
-    chunk = "<!-- {} starts -->{}<!-- {} ends -->".format(marker, chunk, marker)
+    chunk = f"<!-- {marker} starts -->{chunk}<!-- {marker} ends -->"
     return r.sub(chunk, content)
 
 
@@ -36,9 +38,13 @@ def get_stat_values(totals):
 def fetch_stats():
     client = Client()
 
-    refresh_response = client.refresh_access_token(client_id=client_id, client_secret=client_secret,refresh_token=refresh_token)
-    client.access_token = refresh_response['access_token']
+    refresh_response = client.refresh_access_token(
+        client_id=client_id, client_secret=client_secret, refresh_token=refresh_token
+    )
+    client.access_token = refresh_response["access_token"]
     stats = client.get_athlete_stats()
+
+    generate_map_from_last_ride(client, root)
 
     return textwrap.dedent(
         f"""\

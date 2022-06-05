@@ -25,3 +25,5 @@ count: 621
 
 
 <!-- strava_stats ends -->
+
+<img src="./output.png" width="500" />
