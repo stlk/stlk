@@ -1,1 +1,5 @@
 stravalib
+jinja2
+pandas
+numpy
+typer

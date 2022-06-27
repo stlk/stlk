@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: "3.10"
     - uses: actions/cache@v2
       name: Configure pip caching
       with:
@@ -32,12 +32,11 @@ jobs:
         STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
         STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
       run: |-
-        python build_readme.py
-        cat README.md
+        python generate_stats_svg.py generate-live
     - name: Commit and push if README changed
       run: |-
         git diff
         git config --global user.email "readme-bot@example.com"
         git config --global user.name "README-bot"
-        git diff --quiet || (git add README.md && git commit -m "Updated README")
+        git diff --quiet || (git add strava_stats.svg && git commit -m "Updated README")
         git push

@@ -8,6 +8,10 @@ black = "==19.10b0"
 
 [packages]
 stravalib = "*"
+jinja2 = "*"
+pandas = "*"
+numpy = "*"
+typer = "*"
 
 [requires]
 python_version = "3.8"
