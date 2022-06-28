@@ -7,7 +7,7 @@ import matplotlib.patheffects as pe
 import matplotlib
 matplotlib.use('Agg')
 
-from cartopy.io.img_tiles import GoogleTiles, OSM
+from cartopy.io.img_tiles import GoogleTiles, Stamen
 from io import BytesIO
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
@@ -86,7 +86,7 @@ def get_ride_cluster_bounding_boxes(ride_groups, params):
         ride_group_coordinates = []
 
         for ride in ride_group:
-            ride_group_coordinates += [coordinate for coordinate in ride["coordinates"]]
+            ride_group_coordinates += list(ride["coordinates"])
 
         ride_group_bounding_box = get_bounding_box(ride_group_coordinates, params['margin'])
         ride_group_bounding_boxes.append(ride_group_bounding_box)
@@ -154,8 +154,8 @@ def plot_cluster(ax, ride_cluster_bounding_box, ride_cluster, params):
     with satellite imagery as background
     """
 
-    # tiler = OSM()
-    tiler = GoogleTiles()
+    # tiler = GoogleTiles()
+    tiler = Stamen(style="terrain")
     mercator = tiler.crs
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1, projection=mercator)
