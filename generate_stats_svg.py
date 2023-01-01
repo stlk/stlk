@@ -33,7 +33,7 @@ def get_rides():
     return [
         {
             "date": activity.start_date.isoformat(),
-            "distance": activity.distance.get_num(),
+            "distance": float(activity.distance),
         }
         for activity in activities
     ]
